@@ -4,8 +4,8 @@ require_once 'bootstrap.php';
 
 use App\Step;
 
-$step = Step::first();
+$step = Step::find(9);
 
-$actions = $step->actions;
+$ro = $step->requiredObjects;
 
-var_dump(count($actions));
+var_dump($ro);

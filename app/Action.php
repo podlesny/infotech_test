@@ -14,25 +14,4 @@ class Action extends Eloquent{
         return $this->belongsTo(Step::class, 'next_id', 'id');
     }
 
-    public function requiredObjects(){
-        return $this->hasMany(RequiredObject::class);
-    }
-
-    public function getRequiredObjects(){
-        $objects = $this->requiredObjects;
-        $arr = [];
-        foreach($objects as $obj){
-            if($obj->random){
-                $rand = mt_rand(1,100);
-                if($rand > 50){
-                    $arr[] = $obj;
-                }
-            }
-            else{
-                $arr[] = $obj;
-            }
-        }
-        return $arr;
-    }
-
 }

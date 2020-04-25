@@ -83,28 +83,32 @@ Action::create([
 	'next_id' => $descent->id
 ]);
 
-$door = Step::create([
-	'text' => 'Вы спустились вниз и видите дверь.'
+$downStairs = Step::create([
+	'text' => 'Вы спустились вниз.'
+]);
+
+$downLift = Step::create([
+	'text' => 'Вы спустились вниз.'
 ]);
 
 $stairs = Action::create([
 	'text' => 'Спуститься по ступенькам',
 	'prev_id' => $descent->id,
-	'next_id' => $door->id,
+	'next_id' => $downStairs->id,
 ]);
 
 $lift = Action::create([
 	'text' => 'Воспользоваться лифтом',
 	'prev_id' => $descent->id,
-	'next_id' => $door->id,
+	'next_id' => $downLift->id,
 ]);
 
 RequiredObject::create([
 	'fail_text' => 'Ступеньки оказались слишком старые и обвалились. Вы мертвы.',
 	'random' => true,
 	'death' => true,
-	'action_id' => $stairs->id,
-	'required_step_id' => $door->id,
+	'found_step_id' => $downStairs->id,
+	'required_step_id' => $downStairs->id,
 	'redirect_step_id' => $begin->id
 ]);
 
@@ -112,9 +116,25 @@ RequiredObject::create([
 	'fail_text' => 'В лифте оборвался трос. Вы мертвы.',
 	'random' => true,
 	'death' => true,
-	'action_id' => $stairs->id,
-	'required_step_id' => $door->id,
+	'found_step_id' => $downLift->id,
+	'required_step_id' => $downLift->id,
 	'redirect_step_id' => $begin->id
+]);
+
+$door = Step::create([
+	'text' => 'Впереди вы видите закрытую дверь.'
+]);
+
+Action::create([
+	'text' => 'Идти дальше',
+	'prev_id' => $downStairs->id,
+	'next_id' => $door->id
+]);
+
+Action::create([
+	'text' => 'Идти дальше',
+	'prev_id' => $downLift->id,
+	'next_id' => $door->id
 ]);
 
 $corridor = Step::create([
@@ -125,7 +145,7 @@ RequiredObject::create([
 	'pass_text' => 'Вы открыли дверь ключом.',
 	'fail_text' => 'У вас нет предметов чтобы открыть эту дверь. Надо вернуться назад в комнату.',
 	'exists_text' => 'Ключ вы уже взяли, ящик пустой',
-	'action_id' => $upperBox->id,
+	'found_step_id' => $key->id,
 	'required_step_id' => $corridor->id,
 	'redirect_step_id' => $locker->id
 ]);
@@ -134,7 +154,7 @@ RequiredObject::create([
 	'pass_text' => 'Вы взломали дверь ломом.',
 	'fail_text' => 'У вас нет предметов чтобы открыть эту дверь. Надо вернуться назад в комнату.',
 	'exists_text' => 'Лом вы уже взяли, ящик пустой',
-	'action_id' => $lowerBox->id,
+	'found_step_id' => $scrap->id,
 	'required_step_id' => $corridor->id,
 	'redirect_step_id' => $locker->id
 ]);
@@ -180,7 +200,7 @@ RequiredObject::create([
 	'fail_text' => 'Вы нападаете на охранника, но у вас нет оружия и средств защиты, он вас застрелил. Вы мертвы.',
 	'exists_text' => 'Бронежилет вы уже взяли, тут пусто.',
 	'death' => true,
-	'action_id' => $rightSide->id,
+	'found_step_id' => $deadEnd->id,
 	'required_step_id' => $victory->id,
 	'redirect_step_id' => $begin->id
 ]);
@@ -190,7 +210,7 @@ RequiredObject::create([
 	'fail_text' => 'Вы нападаете на охранника, но у вас нет оружия и средств защиты, он вас застрелил. Вы мертвы.',
 	'exists_text' => 'Лом вы уже взяли, ящик пустой',
 	'death' => true,
-	'action_id' => $lowerBox->id,
+	'found_step_id' => $lowerBox->id,
 	'required_step_id' => $victory->id,
 	'redirect_step_id' => $begin->id
 ]);

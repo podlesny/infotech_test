@@ -12,7 +12,7 @@ class RequiredObjectMigration extends Migration
 			$table->string('exists_text')->nullable();
 			$table->boolean('death')->default(false);
 			$table->boolean('random')->default(false);
-			$table->integer('action_id')->unsigned();
+			$table->integer('found_step_id')->unsigned();
 			$table->integer('required_step_id')->unsigned();
 			$table->integer('redirect_step_id')->unsigned();
 		});
