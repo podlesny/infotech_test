@@ -180,7 +180,7 @@ RequiredObject::create([
 	'fail_text' => 'Вы нападаете на охранника, но у вас нет оружия и средств защиты, он вас застрелил. Вы мертвы.',
 	'exists_text' => 'Бронежилет вы уже взяли, тут пусто.',
 	'death' => true,
-	'action_id' => $deadEnd->id,
+	'action_id' => $rightSide->id,
 	'required_step_id' => $victory->id,
 	'redirect_step_id' => $begin->id
 ]);
