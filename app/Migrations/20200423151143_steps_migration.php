@@ -8,10 +8,6 @@ class StepsMigration extends Migration
 		$this->schema->create('steps', function(Illuminate\Database\Schema\Blueprint $table){
 			$table->increments('id');
 			$table->string('text');
-			$table->string('description');
-			$table->integer('parent_id')->unsigned()->nullable();
-			$table->integer('key_id')->unsigned()->nullable();
-			$table->string('key_text')->nullable();
 		});
 	}
 
