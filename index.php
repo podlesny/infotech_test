@@ -2,12 +2,12 @@
 
 require_once 'bootstrap.php';
 
-use App\Controllers\MainController;
+use App\Routing\Router;
 
 $routes = [
-    ['GET', '/', ['MainController', 'index']],
-    ['GET', '/steps/{id:\d+}', ['MainController', 'viewStep']],
-    ['GET', '/actions/{id:\d+}', ['MainController', 'takeAction']],
+    ['GET', '/', ['\App\Controllers\MainController', 'index']],
+    ['GET', '/steps/[{id:\d+}]', ['\App\Controllers\MainController', 'viewStep']],
+    ['GET', '/actions/{id:\d+}', ['\App\Controllers\MainController', 'takeAction']],
 ];
 
 $router = new Router($routes);

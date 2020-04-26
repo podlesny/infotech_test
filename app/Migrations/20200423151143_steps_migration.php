@@ -8,6 +8,7 @@ class StepsMigration extends Migration
 		$this->schema->create('steps', function(Illuminate\Database\Schema\Blueprint $table){
 			$table->increments('id');
 			$table->string('text');
+			$table->boolean('begin')->default(false);
 		});
 	}
 
