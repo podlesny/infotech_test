@@ -8,8 +8,8 @@ class Player extends Eloquent{
 
     protected $guarded = ['id'];
 
-	public function historyItems(){
-		return $this->hasMany(HistoryItem::class);
-	}
+    public function historyItems(){
+        return $this->hasMany(HistoryItem::class);
+    }
 
 }

@@ -12,7 +12,7 @@ session_start();
 $capsule = new Capsule;
 
 $capsule->addConnection([
-	'driver'    => 'mysql',
+    'driver'    => 'mysql',
     'host'      => DB_HOST,
     'port'      => DB_PORT,
     'database'  => DB_NAME,
