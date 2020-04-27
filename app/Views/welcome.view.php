@@ -34,10 +34,10 @@
   	<body class="text-center">
 	  <div class="form-signin">
 		<h1 class="h3 mb-3 font-weight-normal">Квест</h1>
-		<input type="text" id="inputEmail" class="form-control mb-3" placeholder="Ваше имя" required autofocus>
-		<a href="/steps">
-			<button class="btn btn-lg btn-primary btn-block" type="submit">Начать игру</button>
-		</a>
+		<form action="/start">
+			<input type="text" class="form-control mb-3" placeholder="Ваше имя" required autofocus>
+			<button class="btn btn-lg btn-primary btn-block" name = 'username' type="submit">Начать игру</button>
+		</form>
 	  </div>
 	</body>
 </html>

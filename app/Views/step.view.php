@@ -25,19 +25,41 @@
       @media (min-width: 768px) {
         .bd-placeholder-img-lg {
           font-size: 3.5rem;
-        }
+		}
+		
+		.lead{
+			margin-top: 30px;
+		}
       }
     </style>
     <!-- Custom styles for this template -->
-    <link href="https://getbootstrap.com/docs/4.4/examples/sign-in/signin.css" rel="stylesheet">
+    <link href="https://getbootstrap.com/docs/4.4/examples/cover/cover.css" rel="stylesheet">
   	</head>
   	<body class="text-center">
-	  <div class="form-signin">
-		<h1 class="h3 mb-3 font-weight-normal">Квест</h1>
-		<input type="text" id="inputEmail" class="form-control mb-3" placeholder="Ваше имя" required autofocus>
-		<a href="/qwef">
-			<button class="btn btn-lg btn-primary btn-block" type="submit">Начать игру</button>
-		</a>
-	  </div>
+	  <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+
+  <main role="main" class="inner cover mt-auto mb-auto">
+    <h1 class="h3"><?=$params['text']?></h1>
+	<?php
+		foreach($params['actions'] as $action){
+			if($action['restart']){
+				$url = '/restart';
+			}
+			else if($action['redirect']){
+				$url = "/redirect/{$params['id']}/{$action['redirect_step_id']}";
+			}
+			else{
+				$url = "/actions/{$action->id}";
+			}
+			?>
+				<p class="lead">
+    			  <a href="<?=$url?>" class="btn btn-lg btn-secondary"><?=$action['text']?></a>
+    			</p>
+			<?php
+		}
+	?>
+  </main>
+
+</div>
 	</body>
 </html>

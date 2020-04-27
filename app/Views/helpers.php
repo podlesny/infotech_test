@@ -1,5 +1,5 @@
 <?php
 
-function view($name){
+function view($name, $params){
 	include_once(__DIR__."/{$name}.view.php");
 }
