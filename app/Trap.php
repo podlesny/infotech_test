@@ -8,10 +8,10 @@ class Trap extends Eloquent{
 
     protected $guarded = ['id'];
 
-	public $timestamps = false;
-	
-	public function steps(){
-		return $this->hasOne(Step::class);
-	}
+    public $timestamps = false;
+    
+    public function steps(){
+        return $this->hasOne(Step::class);
+    }
 
 }
