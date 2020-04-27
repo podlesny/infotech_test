@@ -117,8 +117,8 @@ class MainController{
 	static function newActionSetSession($action){
 		['WALKTHROUGH' => $walkthrough] = $_SESSION;
 		$walkthrough[] = [
-			'step_id' => $action->id,
-			'action_id' => $action->prevStep->id
+			'step_id' => $action->prevStep->id,
+			'action_id' => $action->id
 		];
 		$_SESSION['WALKTHROUGH'] = $walkthrough;
 	}
