@@ -8,9 +8,9 @@ class Action extends Eloquent{
 
     protected $guarded = ['id'];
 
-	public $timestamps = false;
-	
-	public function prevStep(){
+    public $timestamps = false;
+    
+    public function prevStep(){
         return $this->belongsTo(Step::class, 'prev_id');
     }
 
