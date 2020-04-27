@@ -2,7 +2,7 @@
 require 'config.php';
 return [
   'paths' => [
-    'migrations' => './src/Migrations'
+    'migrations' => './app/Migrations'
   ],
   'migration_base_class' => '\App\Migrations\Migration',
   'environments' => [
