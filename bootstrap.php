@@ -5,6 +5,8 @@ require_once 'config.php';
 
 use Illuminate\Database\Capsule\Manager as Capsule;
 
+error_reporting(E_ERROR | E_WARNING | E_PARSE);
+
 session_start();
  
 $capsule = new Capsule;

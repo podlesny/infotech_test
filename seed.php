@@ -2,13 +2,14 @@
 
 require_once 'bootstrap.php';
 
-use App\Key;
 use App\Action;
-use App\RequiredObject;
+use App\Thing;
 use App\Step;
+use App\Trap;
 
 $begin = Step::create([
 	'text' => 'Вы находитесь в заброшенном помещении, привязаны к креслу. Вы не знаете где вы и как тут оказались, но точно пора отсюда выбираться.',
+	'begin' => true
 ]);
 
 $shot = Step::create([
@@ -32,7 +33,7 @@ Action::create([
 ]);
 
 $locker = Step::create([
-	'text' => 'Вы увидели шкаф с двумя ящиками. Какой откроете?'
+	'text' => 'Вы увидели шкаф с двумя ящиками. Что выберете?'
 ]);
 
 Action::create([
@@ -45,43 +46,44 @@ $descent = Step::create([
 	'text' => 'Вы вышли из комнаты и пришли к лестничной клетке. Нужно спуститься вниз. Что выберете?'
 ]);
 
-$key = Step::create([
+Action::create([
+	'text' => 'Выйти из комнаты',
+	'prev_id' => $locker->id,
+	'next_id' => $descent->id
+]);
+
+$keyFound = Step::create([
 	'text' => 'В ящике найден ключ.'
 ]);
 
-$scrap = Step::create([
+$scrapFound = Step::create([
 	'text' => 'В ящике найден лом.'
 ]);
 
 $upperBox = Action::create([
 	'text' => 'Открыть верхний ящик',
 	'prev_id' => $locker->id,
-	'next_id' => $key->id
+	'next_id' => $keyFound->id
 ]);
 
 $lowerBox = Action::create([
 	'text' => 'Открыть нижний ящик',
 	'prev_id' => $locker->id,
-	'next_id' => $scrap->id
+	'next_id' => $scrapFound->id
 ]);
 
 Action::create([
 	'text' => 'Выйти из комнаты',
-	'prev_id' => $key->id,
+	'prev_id' => $keyFound->id,
 	'next_id' => $descent->id
 ]);
 
 Action::create([
 	'text' => 'Выйти из комнаты',
-	'prev_id' => $scrap->id,
+	'prev_id' => $scrapFound->id,
 	'next_id' => $descent->id
 ]);
 
-Action::create([
-	'text' => 'Выйти из комнаты',
-	'prev_id' => $locker->id,
-	'next_id' => $descent->id
-]);
 
 $downStairs = Step::create([
 	'text' => 'Вы спустились вниз.'
@@ -101,24 +103,6 @@ $lift = Action::create([
 	'text' => 'Воспользоваться лифтом',
 	'prev_id' => $descent->id,
 	'next_id' => $downLift->id,
-]);
-
-RequiredObject::create([
-	'fail_text' => 'Ступеньки оказались слишком старые и обвалились. Вы мертвы.',
-	'random' => true,
-	'death' => true,
-	'found_step_id' => $downStairs->id,
-	'required_step_id' => $downStairs->id,
-	'redirect_step_id' => $begin->id
-]);
-
-RequiredObject::create([
-	'fail_text' => 'В лифте оборвался трос. Вы мертвы.',
-	'random' => true,
-	'death' => true,
-	'found_step_id' => $downLift->id,
-	'required_step_id' => $downLift->id,
-	'redirect_step_id' => $begin->id
 ]);
 
 $door = Step::create([
@@ -141,24 +125,6 @@ $corridor = Step::create([
 	'text' => 'Дверь ведет в коридор. В какую сторону пойдете?'
 ]);
 
-RequiredObject::create([
-	'pass_text' => 'Вы открыли дверь ключом.',
-	'fail_text' => 'У вас нет предметов чтобы открыть эту дверь. Надо вернуться назад в комнату.',
-	'exists_text' => 'Ключ вы уже взяли, ящик пустой',
-	'found_step_id' => $key->id,
-	'required_step_id' => $corridor->id,
-	'redirect_step_id' => $locker->id
-]);
-
-RequiredObject::create([
-	'pass_text' => 'Вы взломали дверь ломом.',
-	'fail_text' => 'У вас нет предметов чтобы открыть эту дверь. Надо вернуться назад в комнату.',
-	'exists_text' => 'Лом вы уже взяли, ящик пустой',
-	'found_step_id' => $scrap->id,
-	'required_step_id' => $corridor->id,
-	'redirect_step_id' => $locker->id
-]);
-
 Action::create([
 	'text' => 'Открыть дверь',
 	'prev_id' => $door->id,
@@ -176,13 +142,13 @@ $deadEnd = Step::create([
 $leftSide = Action::create([
 	'text' => 'Налево',
 	'prev_id' => $corridor->id,
-	'next_id' => $deadEnd->id,
+	'next_id' => $exit->id,
 ]);
 
 $rightSide = Action::create([
 	'text' => 'Направо',
 	'prev_id' => $corridor->id,
-	'next_id' => $exit->id,
+	'next_id' => $deadEnd->id,
 ]);
 
 $goBack = Action::create([
@@ -195,24 +161,10 @@ $victory = Step::create([
 	'text' => ''
 ]);
 
-RequiredObject::create([
-	'pass_text' => 'Охранник в вас выстрелил, но вы в бронежилете. На секунду он потерял бдительность, вы отобрали пистолет и выстрелили в него.',
-	'fail_text' => 'Вы нападаете на охранника, но у вас нет оружия и средств защиты, он вас застрелил. Вы мертвы.',
-	'exists_text' => 'Бронежилет вы уже взяли, тут пусто.',
-	'death' => true,
-	'found_step_id' => $deadEnd->id,
-	'required_step_id' => $victory->id,
-	'redirect_step_id' => $begin->id
-]);
-
-RequiredObject::create([
-	'pass_text' => 'Вы незаметно подкрались сзади и оглушили охранника ломом.',
-	'fail_text' => 'Вы нападаете на охранника, но у вас нет оружия и средств защиты, он вас застрелил. Вы мертвы.',
-	'exists_text' => 'Лом вы уже взяли, ящик пустой',
-	'death' => true,
-	'found_step_id' => $lowerBox->id,
-	'required_step_id' => $victory->id,
-	'redirect_step_id' => $begin->id
+Action::create([
+	'text' => 'Сражаться',
+	'prev_id' => $exit->id,
+	'next_id' => $victory->id,
 ]);
 
 $freedom = Step::create([
@@ -220,7 +172,99 @@ $freedom = Step::create([
 ]);
 
 Action::create([
-	'text' => 'Бежать отсюда.',
+	'text' => 'Бежать отсюда',
 	'prev_id' => $victory->id,
 	'next_id' => $freedom->id,
+]);
+
+/**
+ * $keyThing = Thing::create([
+ * name
+ * exists_text
+ * found_step_id
+ * random
+ * ])
+ * $keyThing->attach($corridor->id, [
+ * pass_text
+ * fail_text
+ * redirect_step_id
+ * death
+ * ])
+ * required_step_id' => $corridor->id, redirect_step_id' => $locker->id
+ */
+
+$key = Thing::create([
+	'name' => 'Ключ',
+	'exists_text' => 'Ключ вы уже взяли, ящик пустой',
+	'found_step_id' => $keyFound->id
+]);
+
+$key->steps()->attach($corridor, [
+	'pass_text' => 'Вы открыли дверь ключом.',
+	'fail_text' => 'У вас нет предметов чтобы открыть эту дверь. Надо вернуться назад в комнату.',
+	'redirect_step_id' => $locker->id,
+]);
+
+$scrap = Thing::create([
+	'name' => 'Лом',
+	'exists_text' => 'Лом вы уже взяли, ящик пустой',
+	'found_step_id' => $scrapFound->id
+]);
+
+$scrap->steps()->attach($corridor, [
+	'pass_text' => 'Вы взломали дверь ломом.',
+	'fail_text' => 'У вас нет предметов чтобы открыть эту дверь. Надо вернуться назад в комнату.',
+	'redirect_step_id' => $locker->id,
+]);
+
+$scrap->steps()->attach($victory, [
+	'death' => true,
+	'pass_text' => 'Вы незаметно подкрались сзади и оглушили охранника ломом.',
+	'fail_text' => 'Вы нападаете на охранника, но у вас нет оружия и средств защиты, он вас застрелил. Вы мертвы.',
+]);
+
+$trapStairs = Trap::create([
+	'name' => 'Ловушка на ступеньках',
+	'step_id' => $downStairs->id,
+	'fail_text' => 'Ступеньки оказались слишком старые и обвалились. Вы мертвы.',
+]);
+
+$trapStairs = Trap::create([
+	'name' => 'Ловушка в лифте',
+	'step_id' => $downLift->id,
+	'fail_text' => 'В лифте оборвался трос. Вы мертвы.',
+]);
+
+// $trapStairs = Thing::create([
+// 	'name' => 'Ловушка на ступеньках',
+// 	'random' => true,
+// 	'found_step_id' => $downStairs->id,
+// ]);
+
+// $trapStairs->steps()->attach($downStairs, [
+// 	'death' => true,
+// 	'fail_text' => 'Ступеньки оказались слишком старые и обвалились. Вы мертвы.',
+// ]);
+
+// $trapLift = Thing::create([
+// 	'name' => 'Ловушка в лифте',
+// 	'random' => true,
+// 	'found_step_id' => $downLift->id,
+// ]);
+
+// $trapLift->steps()->attach($downLift, [
+// 	'death' => true,
+// 	'fail_text' => 'В лифте оборвался трос. Вы мертвы.',
+// ]);
+
+$scrap = Thing::create([
+	'name' => 'Бронежилет',
+	'exists_text' => 'Бронежилет вы уже взяли, тут пусто.',
+	'found_step_id' => $deadEnd->id
+]);
+
+$scrap->steps()->attach($victory, [
+	'death' => true,
+	'pass_text' => 'Охранник в вас выстрелил, но вы в бронежилете. На секунду он потерял бдительность, вы отобрали пистолет и выстрелили в него.',
+	'fail_text' => 'Вы нападаете на охранника, но у вас нет оружия и средств защиты, он вас застрелил. Вы мертвы.',
 ]);
