@@ -37,7 +37,7 @@ class Router{
 			break;
 			case \FastRoute\Dispatcher::FOUND:{
 				$handler = $routeInfo[1];
-				$params = array_merge($routeInfo[2], $_GET);
+				$params = array_merge($routeInfo[2], $_GET, $_POST);
 				$handler($params);
 			}
 			break;

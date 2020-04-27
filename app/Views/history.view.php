@@ -20,7 +20,7 @@
         -moz-user-select: none;
         -ms-user-select: none;
         user-select: none;
-      }
+	  }
 
       @media (min-width: 768px) {
         .bd-placeholder-img-lg {
@@ -29,18 +29,29 @@
       }
     </style>
     <!-- Custom styles for this template -->
-    <link href="https://getbootstrap.com/docs/4.4/examples/sign-in/signin.css" rel="stylesheet">
   	</head>
   	<body class="text-center">
-	  <div class="form-signin">
-		<h1 class="h3 mb-3 font-weight-normal">Квест</h1>
-		<form action="/start" method='POST'>
-			<input type="text" class="form-control mb-3" name = 'username' placeholder="Ваше имя" required autofocus>
-			<button class="btn btn-lg btn-primary btn-block"  type="submit">Начать игру</button>
-		</form>
-		<div class = 'mt-3'>
-			<a href="/history">История прохождений</a>
+	  <?php
+		foreach($params['players'] as $player){
+	  ?>
+		<h3>Игрок: <?=$player['name']?></h3>
+
+	  <div class="row">
+
+		<?php 
+			foreach($player->historyItems as $item){
+		?>
+			<div class="col-md-8 offset-md-2">
+				<div class = 'alert alert-primary history-item'>
+					<p><?=$item->getText()?></p>
+				</div>
+			</div>
+		<?php
+		}
+		?>
 		</div>
-	  </div>
+	  <?php
+	  }
+	  ?>
 	</body>
 </html>

@@ -4,23 +4,55 @@ namespace App\Controllers;
 
 use App\Step;
 use App\Action;
+use App\HistoryItem;
+use App\Player;
 
 include __DIR__.'/../Views/helpers.php';
 
 class MainController{
 
 	public static function index(){
+		session_unset();
 		view('welcome', []);
 	}
 
-	public static function start(){
+	public static function start($params){
+		$validator = new \App\Validation\StartValidator($params);
+		$result = $validator->validate($params);
+		if($result['status'] == 'error'){
+			echo json_encode($result);
+			return;
+		}
 		$step = Step::where('begin', true)->first();
+		$_SESSION['NAME'] = $params['username'];
 		header("Location: /steps/{$step->id}");
 	}
 
 	public static function restart(){
-		session_unset();
+		$name = $_SESSION['NAME'];
+		$walkthrough = $_SESSION['WALKTHROUGH'];
+		if($name && $walkthrough){
+			self::saveWalkthrough($name, $walkthrough);
+		}
 		header("Location: /");
+	}
+
+	public static function showHistory(){
+		$players = Player::with('historyItems')->get();
+		view('history', compact('players'));
+	}
+
+	static function saveWalkthrough($name, $walkthrough){
+		$player = Player::create([
+			'name' => $name,
+		]);
+		foreach($walkthrough as $item){
+			HistoryItem::create([
+				'player_id' => $player->id,
+				'step_id' => $item['step_id'],
+				'action_id' => $item['action_id'],
+			]);
+		}
 	}
 
 	public static function viewStep($params){
@@ -53,10 +85,10 @@ class MainController{
 	}
 
 	static function redirectSetSession($fromId){
-		['WALKTHROUGH' => $walkthrough] = $_SESSION;
+		$walkthrough = $_SESSION['WALKTHROUGH'];
 		$walkthrough[] = [
 			'step_id' => $fromId,
-			'action_id' => -1
+			'action_id' => NULL
 		];
 		$_SESSION['WALKTHROUGH'] = $walkthrough;
 	}
@@ -86,7 +118,7 @@ class MainController{
 		['WALKTHROUGH' => $walkthrough] = $_SESSION;
 		$walkthrough[] = [
 			'step_id' => $action->id,
-			'action_id' => $action->prev_step->id
+			'action_id' => $action->prevStep->id
 		];
 		$_SESSION['WALKTHROUGH'] = $walkthrough;
 	}

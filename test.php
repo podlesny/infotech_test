@@ -4,8 +4,10 @@ require_once 'bootstrap.php';
 
 use App\Step;
 use App\Trap;
+use App\Action;
 
 
-$step = Step::find(8);
 
-var_dump($step->trap->fail_text);
+$action = Action::find(6);
+
+var_dump($action->nextStep->text);

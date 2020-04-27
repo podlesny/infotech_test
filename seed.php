@@ -158,7 +158,7 @@ $goBack = Action::create([
 ]);
 
 $victory = Step::create([
-	'text' => ''
+	'text' => 'Победа'
 ]);
 
 Action::create([
