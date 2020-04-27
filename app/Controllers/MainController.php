@@ -24,7 +24,12 @@ class MainController{
 	}
 
 	public static function viewStep($params){
-		//Validation
+		$validator = new \App\Validation\StepValidator($params);
+		$result = $validator->validate($params);
+		if($result['status'] == 'error'){
+			echo json_encode($result);
+			return;
+		}
 
 		$id = intval($params['id']);
 		$step = Step::find($id);
@@ -61,6 +66,13 @@ class MainController{
 	}
 
 	public static function takeAction($params){
+		$validator = new \App\Validation\ActionValidator($params);
+		$result = $validator->validate($params);
+		if($result['status'] == 'error'){
+			echo json_encode($result);
+			return;
+		}
+
 		$id = intval($params['id']);
 		$action = Action::find($id);
 		$step = $action->nextStep;
