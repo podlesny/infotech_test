@@ -12,6 +12,9 @@ class StepThingMigration extends Migration
             $table->string('fail_text');
             $table->boolean('death')->default(false);
             $table->integer('redirect_step_id')->unsigned()->nullable();
+            $table->foreign('step_id')->references('id')->on('steps');
+            $table->foreign('thing_id')->references('id')->on('things');
+            $table->foreign('redirect_step_id')->references('id')->on('steps');
         });
     }
 

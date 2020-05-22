@@ -10,6 +10,7 @@ class ThingsMigration extends Migration
             $table->string('name');
             $table->string('exists_text')->nullable();
             $table->integer('found_step_id')->unsigned();
+            $table->foreign('found_step_id')->references('id')->on('steps');
         });
     }
 
