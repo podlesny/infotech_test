@@ -1,14 +1,14 @@
 # infotech_test
 Test task for infotech
 
-Квест - выбраться из заброшенного дома
+Quest - get away from abandoned house
 
-Игру возможно пройти разными способами, также некоторые шаги могут вести к случайным результатам
+Game can be finished in multiple ways, some steps can lead to random results
 
-Установка:
+Install:
 
 <pre>git clone https://github.com/podlesny/infotech_test.git</pre>
 
-Создать базу данных MySQL и в файл config.php вписать нужные данные для подключения к базе
+Create MySQL database and in config.php file put the credentials to connect to DB
 
 <pre>composer install</pre>
