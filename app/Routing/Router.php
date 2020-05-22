@@ -28,11 +28,15 @@ class Router{
         $routeInfo = $dispatcher->dispatch($httpMethod, $uri);
         switch ($routeInfo[0]) {
             case \FastRoute\Dispatcher::NOT_FOUND:{
-                echo json_encode(['status' => 'error', 'error_code' => 404, 'error_message' => 'Not Found']);
+                $error = "404 Not found";
+                view('error', compact('error'));
+                exit;
             }
             break;
             case \FastRoute\Dispatcher::METHOD_NOT_ALLOWED:{
-                echo json_encode(['status' => 'error', 'error_code' => 405, 'error_message' => 'Method Not Allowed']);
+                $error = "405 Method Not Allowed";
+                view('error', compact('error'));
+                exit;
             }
             break;
             case \FastRoute\Dispatcher::FOUND:{

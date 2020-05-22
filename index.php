@@ -4,6 +4,9 @@ require_once 'bootstrap.php';
 
 require_once 'constants.php';
 
+require_once 'check-database.php';
+
+
 use App\Routing\Router;
 
 $routes = [

@@ -10,6 +10,7 @@ class TrapsMigration extends Migration
             $table->string('name');
             $table->string('fail_text');
             $table->integer('step_id')->unsigned();
+            $table->foreign('step_id')->references('id')->on('steps');
         });
     }
 

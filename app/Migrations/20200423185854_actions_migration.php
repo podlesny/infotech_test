@@ -10,6 +10,8 @@ class ActionsMigration extends Migration
             $table->string('text');
             $table->integer('prev_id')->unsigned()->nullable();
             $table->integer('next_id')->unsigned()->nullable();
+            $table->foreign('prev_id')->references('id')->on('steps');
+            $table->foreign('next_id')->references('id')->on('steps');
         });
     }
 
