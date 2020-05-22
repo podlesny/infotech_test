@@ -12,7 +12,3 @@ Test task for infotech
 Создать базу данных MySQL и в файл config.php вписать нужные данные для подключения к базе
 
 <pre>composer install</pre>
-
-<pre>php vendor/bin/phinx migrate -c config-phinx.php</pre>
-
-<pre>php seed.php</pre>
